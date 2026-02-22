@@ -11,12 +11,18 @@ Human vs computer with a chess engine using game tree search and pruning.
 4. Win condition checking (checkmate, stalemate, draw).
 5. Chess engine: game tree with minmax, alpha-beta pruning, or Monte Carlo tree search. Selectable difficulty level (e.g. search depth, evaluation sophistication).
 
+### Bonus steps
+6. Log play to a file in figurine algebraic notation.
+7. Replay games interactively from log files.
+8. Highlight valid moves for selected piece.
+
 ## UI
 - ncurses for terminal rendering (board, input, status messages).
 - Unicode chess piece characters for display:
   - White: `♔ ♕ ♖ ♗ ♘ ♙`
   - Black: `♚ ♛ ♜ ♝ ♞ ♟`
 - Wrap ncurses in an abstract interface for testability (inject a stub in tests).
+- Humans can play by using either the mouse or keyboard (arrow keys and ENTER).
 
 ## Design for Future Network Play
 - Core game logic must be fully decoupled from I/O (rendering, input, transport).
@@ -48,6 +54,7 @@ Human vs computer with a chess engine using game tree search and pruning.
 - `#pragma once` for include guards.
 - Include order: system `<>` headers, blank line, project `""` headers.
 - Headers: `.hpp`, sources: `.cpp`.
+- Git hook on commit for enforcing format.
 
 ## Architecture
 - Header-only library in `lib/` (CMake `INTERFACE` library). Only executables in `bin/`.
@@ -82,6 +89,7 @@ Human vs computer with a chess engine using game tree search and pruning.
 - Use fixtures (`::testing::Test`) for shared setup and helper methods.
 - Factory helpers in tests to reduce boilerplate (`make_board`, `make_move`).
 - Integration tests in `test/integration/` to simulate full games: sequence of turns through to checkmate, stalemate, or draw.
+- Github Actions defined in `.github/workflows`.
 
 ## Build
 - CMake 3.16+. `CMAKE_CXX_STANDARD 23`, `CMAKE_CXX_STANDARD_REQUIRED ON`.
