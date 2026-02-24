@@ -42,25 +42,10 @@ struct Square {
 struct Piece {
   [[nodiscard]] constexpr bool operator==(const Piece&) const = default;
 
-  [[nodiscard]] constexpr char32_t display_char() const {
-    // White: ♔ ♕ ♖ ♗ ♘ ♙  (U+2654..U+2659)
-    // Black: ♚ ♛ ♜ ♝ ♞ ♟  (U+265A..U+265F)
-    constexpr char32_t kWhiteKing = U'\u2654';
-    constexpr char32_t kBlackKing = U'\u265A';
-    auto base = (color == Color::White) ? kWhiteKing : kBlackKing;
-    // King=0, Queen=1, Rook=2, Bishop=3, Knight=4, Pawn=5 — matches Unicode order
-    return base + static_cast<char32_t>(type);
-  }
-
-  // UTF-8 encoded display string
-  [[nodiscard]] std::string display_utf8() const {
-    char32_t cp = display_char();
-    std::string result;
-    // All chess symbols are in U+2654..U+265F (3-byte UTF-8)
-    result += static_cast<char>(0xE0 | ((cp >> 12) & 0x0F));
-    result += static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
-    result += static_cast<char>(0x80 | (cp & 0x3F));
-    return result;
+  [[nodiscard]] constexpr std::u8string_view display_utf8() const {
+    static constexpr std::u8string_view kWhite[] = {u8"♔", u8"♕", u8"♖", u8"♗", u8"♘", u8"♙"};
+    static constexpr std::u8string_view kBlack[] = {u8"♚", u8"♛", u8"♜", u8"♝", u8"♞", u8"♟"};
+    return (color == Color::White) ? kWhite[static_cast<int>(type)] : kBlack[static_cast<int>(type)];
   }
 
   Color color = Color::White;

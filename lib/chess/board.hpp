@@ -30,8 +30,8 @@ class Board {
 
     // White back rank (row 0)
     constexpr std::array<PieceType, 8> kBackRank = {PieceType::Rook,   PieceType::Knight, PieceType::Bishop,
-                                                     PieceType::Queen,  PieceType::King,   PieceType::Bishop,
-                                                     PieceType::Knight, PieceType::Rook};
+                                                    PieceType::Queen,  PieceType::King,   PieceType::Bishop,
+                                                    PieceType::Knight, PieceType::Rook};
     for (int8_t col = 0; col < 8; ++col) {
       board.set_piece(Square{.row = 0, .col = col}, Piece{.color = Color::White, .type = kBackRank[col]});
       board.set_piece(Square{.row = 1, .col = col}, Piece{.color = Color::White, .type = PieceType::Pawn});

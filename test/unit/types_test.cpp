@@ -94,43 +94,31 @@ TEST(Piece, Equality) {
   EXPECT_NE(p1, p3);
 }
 
-TEST(Piece, DisplayCharWhite) {
-  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::King}).display_char(), U'\u2654');    // ♔
-  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Queen}).display_char(), U'\u2655');   // ♕
-  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Rook}).display_char(), U'\u2656');    // ♖
-  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Bishop}).display_char(), U'\u2657');  // ♗
-  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Knight}).display_char(), U'\u2658');  // ♘
-  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Pawn}).display_char(), U'\u2659');    // ♙
+TEST(Piece, DisplayUtf8White) {
+  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::King}).display_utf8(), u8"♔");
+  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Queen}).display_utf8(), u8"♕");
+  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Rook}).display_utf8(), u8"♖");
+  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Bishop}).display_utf8(), u8"♗");
+  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Knight}).display_utf8(), u8"♘");
+  EXPECT_EQ((Piece{.color = Color::White, .type = PieceType::Pawn}).display_utf8(), u8"♙");
 }
 
-TEST(Piece, DisplayCharBlack) {
-  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::King}).display_char(), U'\u265A');    // ♚
-  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Queen}).display_char(), U'\u265B');   // ♛
-  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Rook}).display_char(), U'\u265C');    // ♜
-  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Bishop}).display_char(), U'\u265D');  // ♝
-  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Knight}).display_char(), U'\u265E');  // ♞
-  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Pawn}).display_char(), U'\u265F');    // ♟
+TEST(Piece, DisplayUtf8Black) {
+  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::King}).display_utf8(), u8"♚");
+  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Queen}).display_utf8(), u8"♛");
+  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Rook}).display_utf8(), u8"♜");
+  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Bishop}).display_utf8(), u8"♝");
+  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Knight}).display_utf8(), u8"♞");
+  EXPECT_EQ((Piece{.color = Color::Black, .type = PieceType::Pawn}).display_utf8(), u8"♟");
 }
 
-TEST(Piece, DisplayUtf8WhiteKing) {
-  Piece p{.color = Color::White, .type = PieceType::King};
-  EXPECT_EQ(p.display_utf8(), "♔");
-}
-
-TEST(Piece, DisplayUtf8BlackKnight) {
-  Piece p{.color = Color::Black, .type = PieceType::Knight};
-  EXPECT_EQ(p.display_utf8(), "♞");
-}
-
-TEST(Piece, DisplayUtf8AllPieces) {
-  // Verify all 12 pieces produce valid 3-byte UTF-8 strings
+TEST(Piece, DisplayUtf8AllAre3Bytes) {
   for (auto color : {Color::White, Color::Black}) {
     for (auto type :
          {PieceType::King, PieceType::Queen, PieceType::Rook, PieceType::Bishop, PieceType::Knight, PieceType::Pawn}) {
       Piece p{.color = color, .type = type};
-      auto utf8 = p.display_utf8();
-      EXPECT_EQ(utf8.size(), 3u) << "Expected 3-byte UTF-8 for " << static_cast<int>(color) << "/"
-                                 << static_cast<int>(type);
+      EXPECT_EQ(p.display_utf8().size(), 3u)
+          << "Expected 3-byte UTF-8 for " << static_cast<int>(color) << "/" << static_cast<int>(type);
     }
   }
 }
