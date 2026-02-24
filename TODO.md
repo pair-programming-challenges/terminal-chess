@@ -39,17 +39,17 @@ A plain value type describing a single move. No logic — just data + constructi
 
 Generate all legal moves for the active color. Two-stage: pseudo-legal generation, then legality filter.
 
-- [ ] Sliding helper — `generate_sliding_moves(board, from, directions)` iterates along each direction vector until blocked or capturing.
-- [ ] Pawn moves — Single push, double push (from starting rank), diagonal captures, en passant, promotion (4 moves per promotion square: Q/R/B/N).
-- [ ] Knight moves — 8 L-shaped offsets, filter for on-board and not own piece.
-- [ ] Bishop moves — Sliding along 4 diagonal directions.
-- [ ] Rook moves — Sliding along 4 orthogonal directions.
-- [ ] Queen moves — Union of bishop + rook directions.
-- [ ] King moves — 8 adjacent squares + castling (if rights exist, path clear, king doesn't pass through or land in check).
-- [ ] `is_square_attacked(board, square, attacker_color)` — Reverse-probe: check knight offsets for enemy knights, diagonals for bishops/queens, ranks/files for rooks/queens, adjacent for king, pawn attack squares for pawns. Used for check detection and castling validation.
-- [ ] Legality filter — For each pseudo-legal move, apply to a board copy, check if own king is attacked. Discard if yes.
-- [ ] `generate_legal_moves(state) -> std::vector<Move>` — Public entry point combining all of the above.
-- [ ] Tests — Each piece type from various positions: open board, blocked paths, captures, edge-of-board. Pawn promotion, en passant, castling (both sides), castling blocked by check/attack/pieces. Pin scenarios (pinned piece can't move off pin line). Starting position move count (20 for White).
+- [x] Sliding helper — `generate_sliding_moves(board, from, directions)` iterates along each direction vector until blocked or capturing.
+- [x] Pawn moves — Single push, double push (from starting rank), diagonal captures, en passant, promotion (4 moves per promotion square: Q/R/B/N).
+- [x] Knight moves — 8 L-shaped offsets, filter for on-board and not own piece.
+- [x] Bishop moves — Sliding along 4 diagonal directions.
+- [x] Rook moves — Sliding along 4 orthogonal directions.
+- [x] Queen moves — Union of bishop + rook directions.
+- [x] King moves — 8 adjacent squares + castling (if rights exist, path clear, king doesn't pass through or land in check).
+- [x] `is_square_attacked(board, square, attacker_color)` — Reverse-probe: check knight offsets for enemy knights, diagonals for bishops/queens, ranks/files for rooks/queens, adjacent for king, pawn attack squares for pawns. Used for check detection and castling validation.
+- [x] Legality filter — For each pseudo-legal move, apply to a board copy, check if own king is attacked. Discard if yes.
+- [x] `generate_legal_moves(state) -> std::vector<Move>` — Public entry point combining all of the above.
+- [x] Tests — Each piece type from various positions: open board, blocked paths, captures, edge-of-board. Pawn promotion, en passant, castling (both sides), castling blocked by check/attack/pieces. Pin scenarios (pinned piece can't move off pin line). Starting position move count (20 for White). En passant discovered check edge case. (86 tests total, 44 for move generation.)
 
 ## Phase 6: Game State (`lib/chess/game_state.hpp`)
 
