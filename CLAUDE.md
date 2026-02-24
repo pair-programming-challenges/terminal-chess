@@ -48,6 +48,8 @@ Human vs computer with a chess engine using game tree search and pruning.
 - Constants: `kPascalCase` for local constexpr (`kBoardSize`, `kMaxMoves`), system macros stay `UPPER_CASE`
 - Enums: `enum class` with `PascalCase` values (`PieceType::Knight`, `Color::White`)
 - Namespaces: `lowercase::nested` (`chess::engine`)
+- Public functions of classes and structs should be declared before private ones.
+- Member variables of classes and structs should be at the end.
 
 ## Formatting
 - `.clang-format` based on Google style, `ColumnLimit: 120`.

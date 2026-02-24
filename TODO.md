@@ -4,19 +4,19 @@
 
 Set up the build system and directory layout so everything compiles from day one.
 
-- [ ] CMakeLists.txt — Root CMake config with C++23, `-Wall -Werror -Wextra -Wpedantic`, FetchContent for GoogleTest. INTERFACE library target for `lib/`, test executable for `test/unit/`.
-- [ ] Directory structure — Create `lib/chess/`, `bin/`, `test/unit/`, `test/integration/`.
-- [ ] Verify build — Write a trivial GoogleTest case, confirm `cmake --build` and `ctest` pass.
+- [x] CMakeLists.txt — Root CMake config with C++23, `-Wall -Werror -Wextra -Wpedantic`, FetchContent for GoogleTest. INTERFACE library target for `lib/`, test executable for `test/unit/`.
+- [x] Directory structure — Create `lib/chess/`, `bin/`, `test/unit/`, `test/integration/`.
+- [x] Verify build — Write a trivial GoogleTest case, confirm `cmake --build` and `ctest` pass.
 
 ## Phase 2: Core Types (`lib/chess/types.hpp`)
 
 Define the fundamental value types that everything else is built on.
 
-- [ ] `Color` enum — `enum class Color { White, Black }`. Helper `opposite(Color)`.
-- [ ] `PieceType` enum — `enum class PieceType { King, Queen, Rook, Bishop, Knight, Pawn }`.
-- [ ] `Square` struct — Row (0–7) + col (0–7). `is_valid()`, conversion to/from algebraic notation (`"e4"` ↔ `Square{.row=3, .col=4}`). `operator==` for comparisons.
-- [ ] `Piece` struct — `{Color, PieceType}`. `display_char()` returning the Unicode chess character (e.g. `♞` for Black Knight).
-- [ ] Tests — Square validity, algebraic notation round-trip, Piece display characters for all 12 piece/color combinations.
+- [x] `Color` enum — `enum class Color { White, Black }`. Helper `opposite(Color)`.
+- [x] `PieceType` enum — `enum class PieceType { King, Queen, Rook, Bishop, Knight, Pawn }`.
+- [x] `Square` struct — Row (0–7) + col (0–7). `is_valid()`, conversion to/from algebraic notation (`"e4"` ↔ `Square{.row=3, .col=4}`). `operator==` for comparisons.
+- [x] `Piece` struct — `{Color, PieceType}`. `display_char()` returning the Unicode chess character (e.g. `♞` for Black Knight).
+- [x] Tests — Square validity, algebraic notation round-trip, Piece display characters for all 12 piece/color combinations.
 
 ## Phase 3: Board (`lib/chess/board.hpp`)
 

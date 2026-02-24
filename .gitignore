@@ -1,0 +1,19 @@
+# Build
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compiled objects
+*.o
+*.obj
+*.a
+*.lib
+
+# OS
+.DS_Store
+Thumbs.db
