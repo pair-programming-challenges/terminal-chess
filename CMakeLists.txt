@@ -25,6 +25,8 @@ include(GoogleTest)
 
 add_executable(unit_tests
   test/unit/types_test.cpp
+  test/unit/board_test.cpp
+  test/unit/move_test.cpp
 )
 target_link_libraries(unit_tests PRIVATE chess_lib GTest::gtest_main)
 gtest_discover_tests(unit_tests)

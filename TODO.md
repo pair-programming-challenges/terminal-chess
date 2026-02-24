@@ -22,18 +22,18 @@ Define the fundamental value types that everything else is built on.
 
 The board is a flat array of 64 optional pieces. Read/write access by square.
 
-- [ ] `Board` class — `std::array<std::optional<Piece>, 64>`. Methods: `piece_at(Square) -> std::optional<Piece>`, `set_piece(Square, Piece)`, `clear_square(Square)`. Private helper `index(Square) -> size_t`.
-- [ ] `Board::standard()` — Static factory that returns the standard starting position (white on rows 0–1, black on rows 6–7).
-- [ ] Tests — Empty board has no pieces, standard position has correct pieces at all 64 squares, set/clear round-trip.
+- [x] `Board` class — `std::array<std::optional<Piece>, 64>`. Methods: `piece_at(Square) -> std::optional<Piece>`, `set_piece(Square, Piece)`, `clear_square(Square)`. Private helper `index(Square) -> size_t`.
+- [x] `Board::standard()` — Static factory that returns the standard starting position (white on rows 0–1, black on rows 6–7).
+- [x] Tests — Empty board has no pieces, standard position has correct pieces at all 64 squares, set/clear round-trip.
 
 ## Phase 4: Move Representation (`lib/chess/move.hpp`)
 
 A plain value type describing a single move. No logic — just data + construction helpers.
 
-- [ ] `MoveType` enum — `enum class MoveType { Normal, Castle, EnPassant, Promotion }`.
-- [ ] `Move` struct — Fields: `from`, `to`, `piece`, `captured` (optional), `promotion` (optional), `type`. `operator==` for comparisons.
-- [ ] Static factories — `Move::normal(from, to, piece)`, `Move::capture(from, to, piece, captured)`, `Move::en_passant(from, to)`, `Move::castle(king_from, king_to)`, `Move::promotion(from, to, promote_to, captured)`.
-- [ ] Tests — Each factory sets the correct fields. Two moves with same data are equal.
+- [x] `MoveType` enum — `enum class MoveType { Normal, Castle, EnPassant, Promotion }`.
+- [x] `Move` struct — Fields: `from`, `to`, `piece`, `captured` (optional), `promoted_to` (optional), `type`. `operator==` for comparisons.
+- [x] Static factories — `Move::normal(from, to, piece)`, `Move::capture(from, to, piece, captured)`, `Move::en_passant(from, to)`, `Move::castle(king_from, king_to)`, `Move::promotion(from, to, promote_to, captured)`.
+- [x] Tests — Each factory sets the correct fields. Two moves with same data are equal.
 
 ## Phase 5: Move Generation (`lib/chess/move_generator.hpp`)
 
