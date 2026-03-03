@@ -19,10 +19,8 @@ constexpr Piece WB{.color = Color::White, .type = PieceType::Bishop};
 constexpr Piece WN{.color = Color::White, .type = PieceType::Knight};
 constexpr Piece WP{.color = Color::White, .type = PieceType::Pawn};
 constexpr Piece BK{.color = Color::Black, .type = PieceType::King};
-constexpr Piece BQ{.color = Color::Black, .type = PieceType::Queen};
 constexpr Piece BR{.color = Color::Black, .type = PieceType::Rook};
 constexpr Piece BB{.color = Color::Black, .type = PieceType::Bishop};
-constexpr Piece BN{.color = Color::Black, .type = PieceType::Knight};
 constexpr Piece BP{.color = Color::Black, .type = PieceType::Pawn};
 
 constexpr CastlingRights kNoCastling{
