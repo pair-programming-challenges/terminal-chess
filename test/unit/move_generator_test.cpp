@@ -655,6 +655,29 @@ TEST(MoveGenerator, StartingPositionBlackHas20Moves) {
 }
 
 // ============================================================
+// generate_all_legal_moves() — promoted from test helper
+// ============================================================
+
+TEST(MoveGenerator, GenerateAllLegalMovesMatchesHelper) {
+  auto state = GameState::standard();
+  MoveGenerator gen(state);
+  auto api_moves = gen.generate_all_legal_moves();
+  auto helper_moves = all_legal_moves(state);
+  EXPECT_EQ(api_moves.size(), helper_moves.size());
+  EXPECT_EQ(api_moves, helper_moves);
+}
+
+TEST(MoveGenerator, GenerateAllLegalMovesEmptyPosition) {
+  // Lone kings — each has limited moves
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("e8"), BK);
+  MoveGenerator gen(state);
+  auto moves = gen.generate_all_legal_moves();
+  EXPECT_EQ(count_moves_from(moves, sq("e1")), 5);  // d1,d2,f1,f2,e2
+}
+
+// ============================================================
 // En passant edge case: discovered check
 // ============================================================
 

@@ -28,6 +28,7 @@ add_executable(unit_tests
   test/unit/board_test.cpp
   test/unit/move_test.cpp
   test/unit/move_generator_test.cpp
+  test/unit/game_test.cpp
 )
 target_link_libraries(unit_tests PRIVATE chess_lib GTest::gtest_main)
 gtest_discover_tests(unit_tests)

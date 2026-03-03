@@ -94,6 +94,18 @@ class MoveGenerator {
     return moves;
   }
 
+  // All legal moves for the active side. Iterates every square, generates
+  // pseudo-legal moves, then filters by king-safety.
+  [[nodiscard]] std::vector<Move> generate_all_legal_moves() const {
+    std::vector<Move> result;
+    result.reserve(40);
+    for (int8_t r = 0; r < 8; ++r)
+      for (int8_t c = 0; c < 8; ++c)
+        for (const auto& m : generate_moves({.row = r, .col = c}))
+          if (is_move_legal(m)) result.push_back(m);
+    return result;
+  }
+
   // Validates one move: applies it to a board copy, checks if own king is attacked.
   [[nodiscard]] bool is_move_legal(const Move& move) const {
     Board board_copy = state_.board;
