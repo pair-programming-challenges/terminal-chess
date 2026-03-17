@@ -55,13 +55,13 @@ Generate all legal moves for the active color. Two-stage: pseudo-legal generatio
 
 Full game state tracking, move application, and end-condition detection.
 
-- [ ] `GameState` class — Fields: `Board`, active `Color`, castling rights (4 bools: K/Q per side), en passant target square (optional), halfmove clock, fullmove number.
-- [ ] `apply_move(Move)` — Updates the board, toggles active color, updates castling rights (revoke on king/rook move or rook capture), sets/clears en passant square, increments clocks. Handles special moves: castling (move rook too), en passant (remove captured pawn), promotion (replace pawn).
-- [ ] `is_in_check()` — Is the active color's king attacked?
-- [ ] `is_checkmate()` — In check and no legal moves.
-- [ ] `is_stalemate()` — Not in check and no legal moves.
-- [ ] `is_draw()` — Fifty-move rule (halfmove clock ≥ 100). Insufficient material detection (K vs K, K+B vs K, K+N vs K, K+B vs K+B same color bishops) as a stretch goal.
-- [ ] Tests — Apply sequences leading to Scholar's Mate (checkmate), smothered mate, back-rank mate. Stalemate position. Fifty-move draw. Castling rights revoked after king/rook moves. En passant square set after double pawn push and cleared next turn.
+- [x] `GameState` class — Fields: `Board`, active `Color`, castling rights (4 bools: K/Q per side), en passant target square (optional), halfmove clock, fullmove number.
+- [x] `apply_move(Move)` — Updates the board, toggles active color, updates castling rights (revoke on king/rook move or rook capture), sets/clears en passant square, increments clocks. Handles special moves: castling (move rook too), en passant (remove captured pawn), promotion (replace pawn).
+- [x] `is_in_check()` — Is the active color's king attacked?
+- [x] `is_checkmate()` — In check and no legal moves.
+- [x] `is_stalemate()` — Not in check and no legal moves.
+- [x] `is_draw()` — Fifty-move rule (halfmove clock ≥ 100). Insufficient material detection (K vs K, K+B vs K, K+N vs K, K+B vs K+B same color bishops) as a stretch goal.
+- [x] Tests — Apply sequences leading to Scholar's Mate (checkmate), smothered mate, back-rank mate. Stalemate position. Fifty-move draw. Castling rights revoked after king/rook moves. En passant square set after double pawn push and cleared next turn.
 
 ## Phase 7: Player Interface (`lib/chess/player.hpp`)
 

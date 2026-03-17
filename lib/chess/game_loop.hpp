@@ -16,8 +16,7 @@ namespace chess {
 
 class Game {
  public:
-  Game(std::unique_ptr<Player> white, std::unique_ptr<Player> black,
-       GameState initial_state = GameState::standard())
+  Game(std::unique_ptr<Player> white, std::unique_ptr<Player> black, GameState initial_state = GameState::standard())
       : state_(initial_state), players_{std::move(white), std::move(black)} {}
 
   Game(const Game&) = delete;
@@ -27,7 +26,7 @@ class Game {
   // player for a move, apply it, and return the resulting status.
   GameStatus step() {
     // 1. Check 50-move draw before generating moves
-    if (is_fifty_move_draw(state_)) {
+    if (is_fifty_move_draw(state_) || is_insufficient_material(state_.board)) {
       return GameStatus{
           .in_check = is_in_check(state_),
           .result = GameResult{.outcome = Outcome::Draw, .winner = std::nullopt},
@@ -62,9 +61,7 @@ class Game {
   [[nodiscard]] std::span<const Move> history() const { return history_; }
 
  private:
-  [[nodiscard]] Player& active_player() const {
-    return *players_[state_.active_color == Color::White ? 0 : 1];
-  }
+  [[nodiscard]] Player& active_player() const { return *players_[state_.active_color == Color::White ? 0 : 1]; }
 
   GameState state_;
   std::unique_ptr<Player> players_[2];  // [0]=White, [1]=Black

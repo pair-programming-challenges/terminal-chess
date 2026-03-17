@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-
 #include "chess/game_status.hpp"
+
+#include <gtest/gtest.h>
 
 namespace chess {
 namespace {
@@ -102,6 +102,7 @@ TEST(IsFiftyMoveDraw, DrawAbove100) {
 TEST(ComputeStatus, OngoingGameReturnsNoResult) {
   auto state = make_state();
   state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("a1"), WR);
   state.board.set_piece(sq("e8"), BK);
 
   MoveGenerator gen(state);
@@ -180,6 +181,127 @@ TEST(ComputeStatus, InCheckButNotCheckmate) {
 
   EXPECT_TRUE(status.in_check);
   EXPECT_FALSE(status.result.has_value());
+}
+
+// ============================================================
+// is_insufficient_material
+// ============================================================
+
+constexpr Piece WB{.color = Color::White, .type = PieceType::Bishop};
+constexpr Piece WN{.color = Color::White, .type = PieceType::Knight};
+constexpr Piece BB{.color = Color::Black, .type = PieceType::Bishop};
+
+TEST(IsInsufficientMaterial, KingVsKing) {
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("e8"), BK);
+
+  EXPECT_TRUE(is_insufficient_material(state.board));
+}
+
+TEST(IsInsufficientMaterial, KingBishopVsKing) {
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("c1"), WB);
+  state.board.set_piece(sq("e8"), BK);
+
+  EXPECT_TRUE(is_insufficient_material(state.board));
+}
+
+TEST(IsInsufficientMaterial, KingKnightVsKing) {
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("b1"), WN);
+  state.board.set_piece(sq("e8"), BK);
+
+  EXPECT_TRUE(is_insufficient_material(state.board));
+}
+
+TEST(IsInsufficientMaterial, KingVsKingBishop) {
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("e8"), BK);
+  state.board.set_piece(sq("c8"), BB);
+
+  EXPECT_TRUE(is_insufficient_material(state.board));
+}
+
+TEST(IsInsufficientMaterial, KingVsKingKnight) {
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("e8"), BK);
+  state.board.set_piece(sq("b8"), BN);
+
+  EXPECT_TRUE(is_insufficient_material(state.board));
+}
+
+TEST(IsInsufficientMaterial, KingBishopVsKingBishopSameColorSquares) {
+  // Both bishops on light squares (c1 is dark, d1 is light, c4 is light, f8 is light)
+  // Light squares: sum of row+col is odd (0-indexed). c1 = (0,2) sum=2 even=dark.
+  // d3 = (2,3) sum=5 odd=light. f5 = (4,5) sum=9 odd=light.
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("d3"), WB);  // (2,3) light square
+  state.board.set_piece(sq("e8"), BK);
+  state.board.set_piece(sq("f5"), BB);  // (4,5) light square
+
+  EXPECT_TRUE(is_insufficient_material(state.board));
+}
+
+TEST(IsInsufficientMaterial, KingBishopVsKingBishopDifferentColorSquares) {
+  // Bishops on different color squares — sufficient material
+  // d3 = (2,3) sum=5 odd=light. c5 = (4,2) sum=6 even=dark.
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("d3"), WB);  // light square
+  state.board.set_piece(sq("e8"), BK);
+  state.board.set_piece(sq("c5"), BB);  // dark square
+
+  EXPECT_FALSE(is_insufficient_material(state.board));
+}
+
+TEST(IsInsufficientMaterial, SufficientWithPawn) {
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("e2"), WP);
+  state.board.set_piece(sq("e8"), BK);
+
+  EXPECT_FALSE(is_insufficient_material(state.board));
+}
+
+TEST(IsInsufficientMaterial, SufficientWithRook) {
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("a1"), WR);
+  state.board.set_piece(sq("e8"), BK);
+
+  EXPECT_FALSE(is_insufficient_material(state.board));
+}
+
+TEST(IsInsufficientMaterial, SufficientWithTwoKnights) {
+  // Two knights vs king is technically not a forced mate, but FIDE considers
+  // it sufficient material (unlike K+B vs K). We follow FIDE rules.
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("b1"), WN);
+  state.board.set_piece(sq("g1"), Piece{.color = Color::White, .type = PieceType::Knight});
+  state.board.set_piece(sq("e8"), BK);
+
+  EXPECT_FALSE(is_insufficient_material(state.board));
+}
+
+TEST(ComputeStatus, InsufficientMaterialDrawDetected) {
+  auto state = make_state();
+  state.board.set_piece(sq("e1"), WK);
+  state.board.set_piece(sq("e8"), BK);
+
+  MoveGenerator gen(state);
+  auto legal_moves = gen.generate_all_legal_moves();
+  auto status = compute_status(state, legal_moves);
+
+  ASSERT_TRUE(status.result.has_value());
+  EXPECT_EQ(status.result->outcome, Outcome::Draw);
+  EXPECT_FALSE(status.result->winner.has_value());
 }
 
 }  // namespace
