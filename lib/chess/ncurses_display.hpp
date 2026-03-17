@@ -24,11 +24,13 @@ class NcursesDisplay final : public Display {
     mouseinterval(0);
     mousemask(BUTTON1_CLICKED | BUTTON1_PRESSED, nullptr);
 
-    init_pair(kLightSquare, COLOR_BLACK, COLOR_WHITE);
-    init_pair(kDarkSquare, COLOR_WHITE, COLOR_GREEN);
-    init_pair(kCursor, COLOR_BLACK, COLOR_CYAN);
-    init_pair(kSelected, COLOR_BLACK, COLOR_YELLOW);
-    init_pair(kHighlight, COLOR_WHITE, COLOR_BLUE);
+    static constexpr short kSquareBg[] = {COLOR_YELLOW, COLOR_GREEN, COLOR_CYAN, COLOR_MAGENTA, COLOR_BLUE};
+    for (short i = 0; i < 5; ++i) {
+      short base = i + 1;
+      init_pair(base, COLOR_BLACK, kSquareBg[i]);
+      init_pair(base + kWhitePieceOffset, COLOR_WHITE, kSquareBg[i]);
+      init_pair(base + kBlackPieceOffset, COLOR_BLACK, kSquareBg[i]);
+    }
   }
 
   ~NcursesDisplay() override { endwin(); }
@@ -56,7 +58,8 @@ class NcursesDisplay final : public Display {
         if (piece) {
           cchar_t wch{};
           wchar_t wstr[] = {piece->display_wchar(), L'\0'};
-          setcchar(&wch, wstr, A_NORMAL, color, nullptr);
+          short pp = color + (piece->color == Color::White ? kWhitePieceOffset : kBlackPieceOffset);
+          setcchar(&wch, wstr, A_NORMAL, pp, nullptr);
           addch(' ');
           add_wch(&wch);
           addch(' ');
@@ -124,6 +127,8 @@ class NcursesDisplay final : public Display {
   static constexpr short kCursor = 3;
   static constexpr short kSelected = 4;
   static constexpr short kHighlight = 5;
+  static constexpr short kWhitePieceOffset = 5;
+  static constexpr short kBlackPieceOffset = 10;
 
   static constexpr int kBoardX = 3;
   static constexpr int kBoardY = 1;
