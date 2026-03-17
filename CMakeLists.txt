@@ -31,6 +31,7 @@ add_executable(unit_tests
   test/unit/game_test.cpp
   test/unit/game_status_test.cpp
   test/unit/player_test.cpp
+  test/unit/human_player_test.cpp
 )
 target_link_libraries(unit_tests PRIVATE chess_lib GTest::gtest_main)
 gtest_discover_tests(unit_tests)
@@ -40,3 +41,13 @@ add_executable(integration_tests
 )
 target_link_libraries(integration_tests PRIVATE chess_lib GTest::gtest_main)
 gtest_discover_tests(integration_tests)
+
+# Main executable (requires ncurses)
+find_package(Curses)
+if(CURSES_FOUND)
+  add_executable(chess bin/main.cpp)
+  target_link_libraries(chess PRIVATE chess_lib ${CURSES_LIBRARIES})
+  target_include_directories(chess PRIVATE ${CURSES_INCLUDE_DIRS})
+else()
+  message(STATUS "ncurses not found — skipping chess executable (install libncurses-dev)")
+endif()

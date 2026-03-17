@@ -67,10 +67,20 @@ Full game state tracking, move application, and end-condition detection.
 
 Abstract player interface for decoupling game logic from input source.
 
-- [ ] `Player` abstract class — `virtual Move choose_move(const GameState&) = 0`. Virtual destructor.
-- [ ] `RandomPlayer` — Picks a uniformly random legal move. Seeds `std::mt19937` from `std::random_device`.
-- [ ] Tests — `RandomPlayer` always returns a move that is in the legal move list. Given the same state repeatedly, it produces valid moves each time. With a seeded RNG, output is deterministic.
+- [x] `Player` abstract class — `virtual Move choose_move(const GameState&, std::span<const Move>) = 0`. Virtual destructor.
+- [x] `RandomPlayer` — Picks a uniformly random legal move. Seeds `std::mt19937` from `std::random_device`.
+- [x] Tests — `RandomPlayer` always returns a move that is in the legal move list. Given the same state repeatedly, it produces valid moves each time. With a seeded RNG, output is deterministic.
 
-## Phase 8: CI
+## Phase 8: Human Player Interface
+
+Terminal UI with ncurses for human vs computer play.
+
+- [x] `Display` abstract class (`lib/chess/display.hpp`) — Abstract interface wrapping terminal I/O. Methods: `render_board(state, cursor, selected, highlights)`, `show_message(msg)`, `get_input() -> InputEvent`. `InputEvent` with types: ArrowUp/Down/Left/Right, Enter, MouseClick, Quit.
+- [x] `HumanPlayer` (`lib/chess/human_player.hpp`) — Implements `Player`. Uses `Display&` for interaction. Selection state machine: choose piece, then choose destination. Validates against legal moves. Filters highlights to legal targets. Promotion defaults to queen.
+- [x] `NcursesDisplay` (`lib/chess/ncurses_display.hpp`) — Concrete ncurses implementation with Unicode piece rendering, board coloring, cursor highlighting, selected piece and legal move highlights. Supports keyboard (arrow keys + ENTER) and mouse input.
+- [x] Main executable (`bin/main.cpp`) — Launches game: human (White) vs RandomPlayer (Black). Initializes ncurses, runs game loop, displays result.
+- [x] Tests — StubDisplay for HumanPlayer unit tests. Verify piece selection, destination selection, deselection, reselection, keyboard navigation, promotion, quit handling.
+
+## Phase 9: CI
 
 - [ ] GitHub Actions workflow — `.github/workflows/ci.yml`: checkout, install deps, cmake configure/build, ctest. Runs on push and PR to main.
