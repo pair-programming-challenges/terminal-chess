@@ -1,10 +1,11 @@
 #pragma once
 
+#define NCURSES_WIDECHAR 1
+#include <ncurses.h>
+
 #include <algorithm>
 #include <clocale>
 #include <string>
-
-#include <ncurses.h>
 
 #include "chess/display.hpp"
 
@@ -49,13 +50,16 @@ class NcursesDisplay final : public Display {
 
         short color = square_color(sq, cursor, selected, highlights);
         attron(COLOR_PAIR(color));
+        ::move(screen_row, screen_col);
 
         auto piece = state.board.piece_at(sq);
-        move(screen_row, screen_col);
         if (piece) {
-          auto utf8 = piece->display_utf8();
-          std::string str(reinterpret_cast<const char*>(utf8.data()), utf8.size());
-          printw(" %s ", str.c_str());
+          cchar_t wch{};
+          wchar_t wstr[] = {piece->display_wchar(), L'\0'};
+          setcchar(&wch, wstr, A_NORMAL, color, nullptr);
+          addch(' ');
+          add_wch(&wch);
+          addch(' ');
         } else {
           printw("   ");
         }

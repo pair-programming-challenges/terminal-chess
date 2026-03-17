@@ -48,6 +48,13 @@ struct Piece {
     return (color == Color::White) ? kWhite[static_cast<int>(type)] : kBlack[static_cast<int>(type)];
   }
 
+  [[nodiscard]] constexpr wchar_t display_wchar() const {
+    // Unicode code points for chess pieces
+    static constexpr wchar_t kWhite[] = {L'\u2654', L'\u2655', L'\u2656', L'\u2657', L'\u2658', L'\u2659'};
+    static constexpr wchar_t kBlack[] = {L'\u265A', L'\u265B', L'\u265C', L'\u265D', L'\u265E', L'\u265F'};
+    return (color == Color::White) ? kWhite[static_cast<int>(type)] : kBlack[static_cast<int>(type)];
+  }
+
   Color color = Color::White;
   PieceType type = PieceType::Pawn;
 };
